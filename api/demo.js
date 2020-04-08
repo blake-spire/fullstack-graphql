@@ -11,31 +11,37 @@ const typeDefs = gql`
     NIKE
     ADIDAS
     ALLBIRDS
-    BERKENSTOCKS
+    BIRKENSTOCK
   }
 
   type User {
     email: String!
     avatar: String
     friends: [User]!
+    shoes: [Shoe!]
   }
 
   interface Shoe {
     brand: ShoeType!
     size: Int!
+    user: User!
   }
 
   type Sneaker implements Shoe {
     brand: ShoeType!
     size: Int!
+    user: User!
     color: String
   }
 
   type FlipFlop implements Shoe {
     brand: ShoeType!
     size: Int!
+    user: User!
     hasHeelStrap: Boolean
   }
+
+  union Footwear = Sneaker | FlipFlop
 
   input ShoeInput {
     brand: ShoeType
@@ -57,24 +63,30 @@ const typeDefs = gql`
   }
 `;
 
+const userModel = {
+  id: 1,
+  email: "yoda@gmail.com",
+  avatar: "http://yoda.png",
+  friends: [],
+  shoes: [],
+};
+
+const shoeModels = [
+  { brand: "NIKE", size: 8, color: "red", user: 1 },
+  { brand: "ALLBIRDS", size: 9, color: "black", user: 1 },
+  { brand: "BIRKENSTOCK", size: 10, hasHeelStrap: false, user: 1 },
+];
+
 const resolvers = {
   Query: {
     me() {
-      return {
-        email: "yoda@gmail.com",
-        avatar: "http://yoda.png",
-        friends: [],
-      };
+      return userModel;
     },
 
     shoes(_initialValue, arguments, _context) {
       const { input } = arguments;
 
-      return [
-        { brand: "NIKE", size: 8, color: "red" },
-        { brand: "ALLBIRDS", size: 9, color: "black" },
-        { brand: "BERKENSTOCKS", size: 10, hasHeelStrap: false },
-      ];
+      return shoeModels;
     },
   },
 
@@ -84,6 +96,34 @@ const resolvers = {
     },
   },
   Shoe: {
+    __resolveType(shoe) {
+      if (shoe.hasOwnProperty("hasHeelStrap")) return "FlipFlop";
+      else return "Sneaker";
+    },
+    user(shoe) {
+      return userModel;
+    },
+  },
+
+  // Interface resolvers
+  User: {
+    shoes(user) {
+      return shoeModels;
+    },
+  },
+  Sneaker: {
+    user(shoe) {
+      return userModel;
+    },
+  },
+  FlipFlop: {
+    user(shoe) {
+      return userModel;
+    },
+  },
+
+  // Union resolver
+  Footwear: {
     __resolveType(shoe) {
       if (shoe.hasOwnProperty("hasHeelStrap")) return "FlipFlop";
       else return "Sneaker";
