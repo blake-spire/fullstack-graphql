@@ -134,7 +134,13 @@ const resolvers = {
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  context({ req }) {},
+  async context({ req }) {
+    /**
+     * check auth headers here on req
+     * ex:
+     * const jwt = req.header.authorization
+     * */
+  },
 });
 
 server.listen(4000).then(() => console.log("listening on port 4000"));
