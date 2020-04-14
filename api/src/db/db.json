@@ -48,6 +48,13 @@
       "name": "boo",
       "type": "CAT",
       "user": "jBWMVGjm50l6LGwepDoty"
+    },
+    {
+      "id": "njrVXOvejOlgm9QnbysDy",
+      "createdAt": 1586873206472,
+      "name": "taco",
+      "type": "DOG",
+      "user": "jBWMVGjm50l6LGwepDoty"
     }
   ]
 }

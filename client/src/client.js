@@ -11,6 +11,7 @@ import gql from "graphql-tag";
 const typeDefs = gql`
   extend type User {
     age: Int
+    vaccinated: Boolean
   }
 `;
 
@@ -18,6 +19,9 @@ const resolvers = {
   User: {
     age(_user, _args, _context, _info) {
       return 35;
+    },
+    vaccinated() {
+      return true;
     },
   },
 };
