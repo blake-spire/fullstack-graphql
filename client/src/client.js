@@ -11,7 +11,10 @@ import gql from "graphql-tag";
 const typeDefs = gql`
   extend type User {
     age: Int
-    vaccinated: Boolean
+  }
+
+  extend type Pet {
+    vaccinated: Boolean!
   }
 `;
 
@@ -20,6 +23,8 @@ const resolvers = {
     age(_user, _args, _context, _info) {
       return 35;
     },
+  },
+  Pet: {
     vaccinated() {
       return true;
     },

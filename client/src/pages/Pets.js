@@ -11,11 +11,11 @@ const PET_FIELDS = gql`
     name
     type
     img
+    vaccinated @client
     owner {
       id
       username
       age @client
-      vaccinated @client
     }
   }
 `;
